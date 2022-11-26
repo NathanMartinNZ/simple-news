@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { Modal } from 'react-bootstrap'
 import ConfigOverlay from './components/ConfigOverlay'
+import Weather from './components/Weather'
 import SubredditContainer from './components/SubredditContainer'
 
 
@@ -43,10 +44,11 @@ function App() {
         </header>
       </div>
       <div className="container">
+        <Weather />
         {loaded && subreddits.length > 0 && (
           <div>
-            {subreddits.map((subreddit, i) => (
-              <SubredditContainer key={i} subreddit={subreddit} />
+            {subreddits.map((subreddit) => (
+              <SubredditContainer key={subreddit} subreddit={subreddit} />
             ))}
           </div>
         )}

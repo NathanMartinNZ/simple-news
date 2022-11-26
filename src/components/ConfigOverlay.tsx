@@ -12,8 +12,10 @@ function ConfigOverlay({ subreddits, setStoredData }:TConfigProps) {
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     let newSubreddits = [...subreddits]
-    newSubreddits.push(subredditInput)
-    setStoredData(newSubreddits)
+    if(subredditInput && subredditInput != "") {
+      newSubreddits.push(subredditInput)
+      setStoredData(newSubreddits)
+    }
     setSubredditInput("")
   }
 
@@ -29,8 +31,8 @@ function ConfigOverlay({ subreddits, setStoredData }:TConfigProps) {
       </Modal.Header>
       <Modal.Body>
         <div>
-          {subreddits && subreddits.map((subreddit, i) => (
-            <div key={i}>
+          {subreddits && subreddits.map((subreddit) => (
+            <div key={subreddit}>
               <div>{subreddit}</div>
               <span onClick={() => handleRemoveSubreddit(subreddit)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16" style={{cursor: "pointer"}}>
@@ -48,6 +50,7 @@ function ConfigOverlay({ subreddits, setStoredData }:TConfigProps) {
               onChange={(e) => setSubredditInput(e.target.value)}
               name="subreddit"
               placeholder="e.g. worldnews"
+              required
             >
             </input>
             <button className="btn btn-primary" type="submit">Add</button>
