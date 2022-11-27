@@ -19,7 +19,7 @@ export default async function fetchCityWeather({ lat, long }:{ lat:number, long:
     icon: ""
   }
 
-  await axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${long}&appid=8fc4b4a184853a9401cf6545be8578b3`)
+  await axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${long}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
     .then(res => {
       data = {
         id: res.data.id,

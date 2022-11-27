@@ -11,7 +11,7 @@ export default async function fetchCityCoords(city:string) {
     lon: 0
   }
 
-  await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=8fc4b4a184853a9401cf6545be8578b3`)
+  await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
     .then(res => data = res.data[0])
 
   return data
