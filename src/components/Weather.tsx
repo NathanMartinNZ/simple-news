@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useStore } from '../store/store'
 import fetchCityCoords from '../api/fetchCityCoords'
 import fetchCityWeather from '../api/fetchCityWeather'
 
@@ -17,14 +18,17 @@ type TCityWeather = {
 }
 
 function Weather() {
-  const [ weather, setWeather ] = useState<TCityWeather>()
+  const { setWeatherState } = useStore()
+  const weather:TCityWeather|undefined = useStore((state) => state.weather)
+  //const [ weather, setWeather ] = useState<TCityWeather>()
   const [ loaded, setLoaded ] = useState(false)
   const cityRef = useRef<HTMLInputElement>(null)
 
   const weatherFetch = async (coords:TCoords) => {
     const weatherRes = await fetchCityWeather(coords)
-    setWeather(weatherRes)
-  } 
+    setWeatherState(weatherRes)
+    //setWeather(weatherRes)
+  }
 
   useEffect(() => {
     const init = async () => {
@@ -67,21 +71,22 @@ function Weather() {
   }
 
   return (
-    <div className="d-flex align-items-center mb-3">
-      {loaded && !weather && (
-        <div className="row">
+    <>
+    {loaded && !weather && (
+      <div className="d-flex justify-content-center align-items-center mb-3">
+        <div className="row mb-3">
           <div className="col-12 col-md-5 d-flex justify-content-center align-items-center">
-            <button className="btn btn-secondary" onClick={handleGetLocation}>Get location for weather</button>
+            <button className="col btn btn-secondary" onClick={handleGetLocation}>Get location for weather</button>
           </div>
           <div className="col-12 col-md-2 py-3 py-md-0 d-flex justify-content-center align-items-center">or</div>
           <div className="col-12 col-md-5 d-flex justify-content-center align-items-center">
-            <form onSubmit={handleChooseCity}>
-              <div className="form-group d-inline-flex">
+            <form className="col" onSubmit={handleChooseCity}>
+              <div className="input-group">
                 <input
                   className="form-control"
                   ref={cityRef} 
                   name="subreddit"
-                  placeholder="Auckland"
+                  placeholder="Auckland,NZ"
                   required
                 >
                 </input>
@@ -90,16 +95,19 @@ function Weather() {
             </form>
           </div>
         </div>
-      )}
-      {loaded && weather && (
+      </div>
+    )}
+    {loaded && weather && (
+      <div className="d-flex align-items-center mb-3">
         <div className="row">
           <div className="col-sm-auto">
             <img width={50} src={`https://openweathermap.org/img/w/${weather.icon}.png`} />
           </div>
           <span className="col d-flex align-items-center">{weather.temp}° {weather.description} in {weather.name}</span>
         </div>
-      )}
-    </div>
+      </div>
+    )}
+    </>
   )
 }
 

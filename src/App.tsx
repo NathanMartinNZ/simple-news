@@ -53,12 +53,14 @@ function App() {
           </div>
         )}
         {loaded && !subreddits.length && (
-          <div>
-            <button className="btn btn-primary" onClick={() => handleToggleConfig()}>Add first subreddit</button>
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="">
+              <button className="btn btn-primary" onClick={() => handleToggleConfig()}>Add first subreddit</button>
+            </div>
           </div>
         )}
         <Modal show={showConfig} onHide={handleToggleConfig} centered className="px-3">
-          <ConfigOverlay subreddits={subreddits} setStoredData={setStoredData} />
+          <ConfigOverlay subreddits={subreddits} setStoredData={setStoredData} handleToggleConfig={handleToggleConfig} />
         </Modal>
       </div>
     </div>
