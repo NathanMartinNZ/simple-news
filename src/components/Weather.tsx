@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useStore } from '../store/store'
-import fetchCityCoords from '../api/fetchCityCoords'
-import fetchCityWeather from '../api/fetchCityWeather'
+import axios from 'axios'
 
 type TCoords = {
-  lat: number,
-  long: number
+  lat: string|undefined,
+  long: string|undefined
 }
 
 type TCityWeather = {
@@ -20,14 +19,12 @@ type TCityWeather = {
 function Weather() {
   const { setWeatherState } = useStore()
   const weather:TCityWeather|undefined = useStore((state) => state.weather)
-  //const [ weather, setWeather ] = useState<TCityWeather>()
   const [ loaded, setLoaded ] = useState(false)
   const cityRef = useRef<HTMLInputElement>(null)
 
   const weatherFetch = async (coords:TCoords) => {
-    const weatherRes = await fetchCityWeather(coords)
-    setWeatherState(weatherRes)
-    //setWeather(weatherRes)
+    const weatherRes = await axios.get(`/.netlify/functions/netlifyCityWeather?lat=${coords.lat}&long=${coords.long}`)
+    setWeatherState(weatherRes.data)
   }
 
   useEffect(() => {
@@ -47,7 +44,10 @@ function Weather() {
       const long = position.coords.longitude;
 
       if(lat && long) {
-        const coordsObj = { lat, long }
+        const coordsObj = {
+          lat: lat.toString(), 
+          long: long.toString()
+        }
         
         window.localStorage.setItem("coords", JSON.stringify(coordsObj))
         weatherFetch(coordsObj)
@@ -59,10 +59,10 @@ function Weather() {
     e.preventDefault()
     if(!cityRef.current) { return }
     const city = cityRef.current.value
-    const coordsRes = await fetchCityCoords(city)
-    const coordsObj = { 
-      lat: coordsRes.lat, 
-      long: coordsRes.lon 
+    const coordsRes = await axios.get(`/.netlify/functions/netlifyCityCoords?city=${city}`)
+    const coordsObj:TCoords = { 
+      lat: coordsRes.data.lat, 
+      long: coordsRes.data.lon 
     }
     
     window.localStorage.setItem("coords", JSON.stringify(coordsObj))
