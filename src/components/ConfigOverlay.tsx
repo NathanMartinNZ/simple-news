@@ -25,7 +25,7 @@ function ConfigOverlay({ subreddits, setStoredData, handleToggleConfig }:TConfig
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     let newSubreddits = [...subreddits]
-    if(subredditInput && subredditInput != "") {
+    if(subredditInput && subredditInput !== "") {
       newSubreddits.push(subredditInput)
       setStoredData(newSubreddits)
     }
@@ -33,7 +33,7 @@ function ConfigOverlay({ subreddits, setStoredData, handleToggleConfig }:TConfig
   }
 
   const handleRemoveSubreddit = (subreddit:string) => {
-    let newSubreddits = [...subreddits].filter(s => s != subreddit)
+    let newSubreddits = [...subreddits].filter(s => s !== subreddit)
     setStoredData(newSubreddits)
   }
 

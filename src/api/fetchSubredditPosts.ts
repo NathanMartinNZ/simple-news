@@ -15,7 +15,7 @@ export default async function fetchSubredditPosts(subreddit:string) {
     }
   }
 
-  await axios.get(`https://www.reddit.com/r/${subreddit}/top.json?sort=top&tday`)
+  await axios.get(`https://www.reddit.com/r/${subreddit}/top.json?sort=top&t=day`)
     .then(res => data = res.data)
 
   return data
